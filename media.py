@@ -34,14 +34,22 @@ class Player:
         cap = self.set()
 
         while(cap.isOpened()):
-            ret, frame = cap.read()
+            retval, frame = cap.read()
+
             self.screen.fill(self.screen_fill)
 
-            ret_frame = frame_obj.process_frame(color_bgr, frame)
-            frame = ret_frame.swapaxes(0, 1)
-            key = cv.waitKey(5)
+            canny = frame_obj.canny_edges(frame)
+            cropped = frame_obj.mask(canny)
 
-            pygame.surfarray.blit_array(self.screen, frame)
+            lines = cv.HoughLinesP(cropped, 2, np.pi / 180, 100, np.array([]), 100, maxLineGap = 5 )
+            
+            average_lines = frame_obj.average_slope_intercept(frame, lines)
+            line_frame = frame_obj.process_frame_for_lines(color_bgr, frame, average_lines)
+            combo_frame = cv.addWeighted(frame, 0.8, line_frame, 1, 1)
+            cf = combo_frame.swapaxes(0,1)
+            key = cv.waitKey(100)
+
+            pygame.surfarray.blit_array(self.screen, cf)
             pygame.display.update()
         
             for event in pygame.event.get():

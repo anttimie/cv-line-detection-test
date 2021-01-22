@@ -3,7 +3,7 @@ import visual
 import frame
 
 def main():
-    filename = ''
+    filename = 'video.mp4'
     player = media.Player(filename)
     player.play()
 
