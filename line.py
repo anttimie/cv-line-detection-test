@@ -1,7 +1,9 @@
 import media
+import visual
+import frame
 
 def main():
-    filename = 'driving.mp4'
+    filename = ''
     player = media.Player(filename)
     player.play()
 

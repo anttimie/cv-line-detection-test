@@ -2,6 +2,8 @@ import sys
 import pygame
 import cv2 as cv
 import numpy as np
+import visual
+import frame as f_mod
 
 from pygame.locals import KEYDOWN, K_ESCAPE, K_q
 
@@ -25,15 +27,19 @@ class Player:
         return cap
 
     def play(self):
+        visual_obj = visual.Color(255, 0, 0)
+        color_bgr = visual_obj.solve()
+        frame_obj = f_mod.Frame(color_bgr)
+
         cap = self.set()
 
         while(cap.isOpened()):
             ret, frame = cap.read()
             self.screen.fill(self.screen_fill)
-            frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-            frame = frame.swapaxes(0, 1)
-            
-            key = cv.waitKey(30)
+
+            ret_frame = frame_obj.process_frame(color_bgr, frame)
+            frame = ret_frame.swapaxes(0, 1)
+            key = cv.waitKey(5)
 
             pygame.surfarray.blit_array(self.screen, frame)
             pygame.display.update()
