@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 class Frame:
-    def __init__(self, filename = r"D:\code\scripts\python\cart.jpg", threshold1 = 50, threshold2 = 150, minLineLen = 100, maxLineGap = 10):
+    def __init__(self, filename = r"\cart.jpg", threshold1 = 50, threshold2 = 150, minLineLen = 100, maxLineGap = 10):
         self.filename = filename
         self.threshold1 = threshold1
         self.threshold2 = threshold2
@@ -18,7 +18,7 @@ class Frame:
         
         return frame_ok
 
-    # Thanks: https://www.geeksforgeeks.org/opencv-real-time-road-lane-detection/ begin
+    # Thanks begin: https://www.geeksforgeeks.org/opencv-real-time-road-lane-detection/
     def canny_edges(self, frame):
       converted = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
       blurred = cv.GaussianBlur(converted, (5, 5), 0)
@@ -31,7 +31,9 @@ class Frame:
       polygons = np.array([
         [(200, h), (1920, h), (550, 250)]
       ])
-      print(polygons)
+      
+      # print(polygons)
+
       mask = np.zeros_like(frame)
       cv.fillPoly(mask, polygons, 255)
       masked = cv.bitwise_and(frame, mask)
@@ -63,16 +65,22 @@ class Frame:
           right_fit.append((slope, intercept)) 
       
       if left_fit:
-        left_fit_average = np.average(left_fit, axis = 0)
-        left_line = self.create_coordinates(frame, left_fit_average)
+        left_line = self.fits(left_fit, frame)
+        # print(left_line)
 
       if right_fit:
-        right_fit_average = np.average(right_fit, axis = 0)
-        right_line = self.create_coordinates(frame, right_fit_average)
+        right_line = self.fits(right_fit, frame)
+        print(right_line)
 
       return np.array([left_line, right_line])
+    # Thanks end: https://www.geeksforgeeks.org/opencv-real-time-road-lane-detection/
 
-    # Thanks: https://www.geeksforgeeks.org/opencv-real-time-road-lane-detection/ end
+    def fits(self, side_fit, frame):
+      value = []
+      avg = np.average(side_fit, axis = 0)
+      value = self.create_coordinates(frame, avg)
+
+      return value
 
     # To test single frame
     def process_single_frame(self, color):
