@@ -1,10 +1,12 @@
-import media
-import visual
-import frame
+import os
+from stuff.media import Player
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
-    filename = "driving.mp4"
-    player = media.Player(filename)
+    filename = os.getenv("VIDEOPATH")
+    player = Player(filename)
     player.play()
 
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
+import os
 import cv2 as cv
 import numpy as np
 
 class Frame:
-    def __init__(self, filename = r"\cart.jpg", threshold1 = 50, threshold2 = 150, minLineLen = 100, maxLineGap = 10):
+    def __init__(self, filename = os.getenv("PICTUREPATH"), threshold1 = 50, threshold2 = 150, minLineLen = 100, maxLineGap = 10):
         self.filename = filename
         self.threshold1 = threshold1
         self.threshold2 = threshold2
@@ -93,4 +94,4 @@ class Frame:
         for x1, y1, x2, y2 in line:
           cv.line(image, (x1, y1), (x2, y2), color, 3)
         
-      cv.imwrite("hlinesp.jpg", image)
+      cv.imwrite("locals/hlinesp.jpg", image)

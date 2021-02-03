@@ -2,10 +2,10 @@ import sys
 import pygame
 import cv2 as cv
 import numpy as np
-import visual
-import frame as f_mod
+from stuff.frame import Frame
 
 from pygame.locals import KEYDOWN, K_ESCAPE, K_q
+from stuff.visual import Color
 
 class Player:
     caption = 'open cv video stream on pygame'
@@ -27,9 +27,9 @@ class Player:
         return cap
 
     def play(self):
-        visual_obj = visual.Color(255, 0, 0)
+        visual_obj = Color(255, 0, 0)
         color_bgr = visual_obj.solve()
-        frame_obj = f_mod.Frame(color_bgr)
+        frame_obj = Frame(color_bgr)
 
         cap = self.set()
 
